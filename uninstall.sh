@@ -2,11 +2,11 @@
 set -euo pipefail
 
 INSTALL_DIR="$HOME/.ytbdht42"
-SCRIPT_NAME="ytbdht42".sh"
-ALIAS_CMD="alias ytbdht42"=\"$INSTALL_DIR/$SCRIPT_NAME\""
-PROFILE_FILES=("$HOME/.bashrc" "$HOME/.zshrc" "$HOME/.profile")
+SCRIPT_NAME="ytbdht42.sh"
+ALIAS_CMD="alias ytbdht42=\"$INSTALL_DIR/$SCRIPT_NAME\""
+PROFILE_FILES=( "$HOME/.bashrc" "$HOME/.zshrc" "$HOME/.profile" )
 
-echo "• Uninstalling ytbdht42 ..."
+echo "• Uninstalling ytbdht42 …"
 
 # 1) Remove install directory
 if [[ -d "$INSTALL_DIR" ]]; then
@@ -22,8 +22,8 @@ echo "• Cleaning up shell profiles:"
 for profile in "${PROFILE_FILES[@]}"; do
   if [[ -f "$profile" ]]; then
     if grep -Fxq "$ALIAS_CMD" "$profile"; then
-      # Use sed to delete exact alias line
-      sed -i.bak "\#^${ALIAS_CMD//#/\\#}\$#d" "$profile"
+      # Delete the exact alias line (make a .bak backup)
+      sed -i.bak "\|^${ALIAS_CMD}$|d" "$profile"
       echo "  • Removed alias from $(basename "$profile") (backup at ${profile}.bak)"
     else
       echo "  • No alias line in $(basename "$profile")"
@@ -35,4 +35,4 @@ done
 echo
 echo "• Restarting your shell to apply changes…"
 exec "$SHELL" -l
-echo "• ytbdht42" uninstalled successfully."
+echo "• Uninstallation complete."
